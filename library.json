@@ -1,0 +1,25 @@
+{
+    "name": "DebounceEvent",
+    "keywords": "button,event,debounce",
+    "description": "Simple button debounce event with support for single, double and long clicks",
+    "repository": {
+        "type": "git",
+        "url": "https://bitbucket.org/xoseperez/debounceevent.git"
+    },
+    "version": "1..0.0",
+    "license": "GPL-3.0",
+    "exclude": "tests",
+    "frameworks": "arduino",
+    "platforms": "arduino,espressif8266",
+    "dependencies": [
+    ],
+    "authors": {
+        "name": "Xose Perez",
+        "email": "xose.perez@gmail.com",
+        "url": "http://tinkerman.cat",
+        "maintainer": true
+    },
+    "examples": [
+        "examples/*/*.ino"
+    ]
+}
