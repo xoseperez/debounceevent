@@ -22,18 +22,14 @@
 
 #define BUTTON_PIN  0
 
-DebounceEvent * button;
+DebounceEvent button = DebounceEvent(BUTTON_PIN, BUTTON_SWITCH | BUTTON_DEFAULT_HIGH);
 
 void setup() {
     Serial.begin(115200);
-    button = new DebounceEvent(BUTTON_PIN, BUTTON_PUSHBUTTON | BUTTON_DEFAULT_HIGH);
 }
 
 void loop() {
-    if (button->loop()) {
-        byte event = button->getEvent();
-        if (event == EVENT_SINGLE_CLICK) Serial.println("Click");
-        if (event == EVENT_DOUBLE_CLICK) Serial.println("Double Click");
-        if (event == EVENT_LONG_CLICK) Serial.println("Long Click");
+    if (button.loop()) {
+        Serial.println("Switched");
     }
 }

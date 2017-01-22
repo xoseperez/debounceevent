@@ -1,7 +1,7 @@
 /*
 
   Debounce buttons and trigger events
-  Copyright (C) 2015-2016 by Xose Pérez <xose dot perez at gmail dot com>
+  Copyright (C) 2015-2017 by Xose Pérez <xose dot perez at gmail dot com>
 
   This program is free software: you can redistribute it and/or modify
   it under the terms of the GNU General Public License as published by
@@ -21,25 +21,43 @@
 #ifndef _DEBOUNCE_EVENT_h
 #define _DEBOUNCE_EVENT_h
 
-#define DEBOUNCE_DELAY 50
-#define LONG_CLICK_DELAY 1000
-#define DOUBLE_CLICK_DELAY 500
+#include <functional>
 
-#define EVENT_NONE 0
-#define EVENT_CHANGED 1
-#define EVENT_PRESSED 2
-#define EVENT_RELEASED 3
-#define EVENT_SINGLE_CLICK 3
-#define EVENT_DOUBLE_CLICK 4
-#define EVENT_LONG_CLICK 5
+#define BUTTON_PUSHBUTTON   0
+#define BUTTON_SWITCH       1
+#define BUTTON_DEFAULT_HIGH 2
+#define BUTTON_SET_PULLUP   4
+
+#define DEBOUNCE_DELAY      50
+#define LONG_CLICK_DELAY    1000
+#define DOUBLE_CLICK_DELAY  500
+
+#define EVENT_NONE          0
+#define EVENT_CHANGED       1
+#define EVENT_PRESSED       2
+#define EVENT_RELEASED      3
+#define EVENT_SINGLE_CLICK  3
+#define EVENT_DOUBLE_CLICK  4
+#define EVENT_LONG_CLICK    5
 
 typedef void(*callback_t)(uint8_t pin, uint8_t event);
 
 class DebounceEvent {
 
+    public:
+
+        typedef std::function<void(uint8_t pin, uint8_t event)> TDebounceEventCallback;
+
+        DebounceEvent(uint8_t pin, TDebounceEventCallback callback, uint8_t mode = BUTTON_PUSHBUTTON | BUTTON_DEFAULT_HIGH, unsigned long delay = DEBOUNCE_DELAY);
+        DebounceEvent(uint8_t pin, uint8_t mode = BUTTON_PUSHBUTTON | BUTTON_DEFAULT_HIGH, unsigned long delay = DEBOUNCE_DELAY);
+        bool pressed();
+        bool loop();
+        uint8_t getEvent();
+
     private:
 
         uint8_t _pin;
+        uint8_t _mode;
         uint8_t _status;
         uint8_t _event;
         bool _clicked = false;
@@ -47,15 +65,9 @@ class DebounceEvent {
         unsigned long _last_start;
         uint8_t _defaultStatus;
         unsigned long _delay;
-        callback_t _callback = false;
+        TDebounceEventCallback _callback = NULL;
 
-    public:
-
-        DebounceEvent(uint8_t pin, callback_t callback, uint8_t defaultStatus = HIGH, unsigned long delay = DEBOUNCE_DELAY);
-        DebounceEvent(uint8_t pin, uint8_t defaultStatus = HIGH, unsigned long delay = DEBOUNCE_DELAY);
-        bool pressed();
-        bool loop();
-        uint8_t getEvent();
+        void _init(uint8_t pin, uint8_t mode, unsigned long delay);
 
 };
 

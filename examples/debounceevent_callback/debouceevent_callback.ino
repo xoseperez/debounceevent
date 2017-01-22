@@ -1,7 +1,7 @@
 /*
 
   Debounce buttons and trigger events
-  Copyright (C) 2015-2016 by Xose Pérez <xose dot perez at gmail dot com>
+  Copyright (C) 2015-2017 by Xose Pérez <xose dot perez at gmail dot com>
 
   This program is free software: you can redistribute it and/or modify
   it under the terms of the GNU General Public License as published by
@@ -21,25 +21,25 @@
 #include <DebounceEvent.h>
 
 #define BUTTON_UP       0
-#define BUTTON_DOWN     2
-
-void callback(uint8_t pin, uint8_t event);
-
-DebounceEvent button1 = DebounceEvent(BUTTON_UP, callback);
-DebounceEvent button2 = DebounceEvent(BUTTON_DOWN, callback);
+#define BUTTON_DOWN     4
 
 void callback(uint8_t pin, uint8_t event) {
 
     if (pin == BUTTON_UP) {
-        Serial.print("Button UP => ");
+        Serial.print("Button UP: ");
     } else {
-        Serial.print("Button DOWN => ");
+        Serial.print("Button DOWN: ");
     }
 
+    if (event == EVENT_CHANGED) Serial.println("Changed");
+    if (event == EVENT_PRESSED) Serial.println("Pressed");
     if (event == EVENT_SINGLE_CLICK) Serial.println("Click");
     if (event == EVENT_DOUBLE_CLICK) Serial.println("Double Click");
     if (event == EVENT_LONG_CLICK) Serial.println("Long Click");
 }
+
+DebounceEvent button1 = DebounceEvent(BUTTON_UP, callback, BUTTON_PUSHBUTTON | BUTTON_DEFAULT_HIGH);
+DebounceEvent button2 = DebounceEvent(BUTTON_DOWN, callback, BUTTON_SWITCH | BUTTON_DEFAULT_HIGH | BUTTON_SET_PULLUP);
 
 void setup() {
     Serial.begin(115200);

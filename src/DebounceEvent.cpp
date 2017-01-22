@@ -1,7 +1,7 @@
 /*
 
   Debounce buttons and trigger events
-  Copyright (C) 2015-2016 by Xose Pérez <xose dot perez at gmail dot com>
+  Copyright (C) 2015-2017 by Xose Pérez <xose dot perez at gmail dot com>
 
   This program is free software: you can redistribute it and/or modify
   it under the terms of the GNU General Public License as published by
@@ -21,23 +21,29 @@
 #include <Arduino.h>
 #include "DebounceEvent.h"
 
-DebounceEvent::DebounceEvent(uint8_t pin, callback_t callback, uint8_t defaultStatus, unsigned long delay) {
+DebounceEvent::DebounceEvent(uint8_t pin, TDebounceEventCallback callback, uint8_t mode, unsigned long delay) {
     _callback = callback;
-    DebounceEvent(pin, defaultStatus, delay);
+    _init(pin, mode, delay);
 }
 
-DebounceEvent::DebounceEvent(uint8_t pin, uint8_t defaultStatus, unsigned long delay) {
+DebounceEvent::DebounceEvent(uint8_t pin, uint8_t mode, unsigned long delay) {
+    _init(pin, mode, delay);
+}
+
+
+void DebounceEvent::_init(uint8_t pin, uint8_t mode, unsigned long delay) {
 
     // store configuration
     _pin = pin;
-    _status = _defaultStatus = defaultStatus;
+    _mode = mode & 0x01;
+    _status = _defaultStatus = (mode & BUTTON_DEFAULT_HIGH) > 0;
     _delay = delay;
 
     // set up button
-    if (_defaultStatus == LOW) {
-        pinMode(_pin, INPUT);
-    } else {
+    if ((mode & BUTTON_SET_PULLUP) > 0) {
         pinMode(_pin, INPUT_PULLUP);
+    } else {
+        pinMode(_pin, INPUT);
     }
 
 }
@@ -51,39 +57,50 @@ bool DebounceEvent::loop() {
     if (digitalRead(_pin) != _status) {
 
         // Debounce
-        delay(_delay);
+        unsigned long start = millis();
+        while (millis() - start < _delay) {
+            delay(1);
+        }
+
         uint8_t newStatus = digitalRead(_pin);
         if (newStatus != _status) {
 
             changed = true;
-            _clicked = false;
             _status = newStatus;
 
-            // released
-            if (_status == _defaultStatus) {
+            if (_mode == BUTTON_PUSHBUTTON) {
 
-                // get event
-                if (millis() - _this_start > LONG_CLICK_DELAY) {
-                    _event = EVENT_LONG_CLICK;
-                } else if (millis() - _last_start < DOUBLE_CLICK_DELAY ) {
-                    _event = EVENT_DOUBLE_CLICK;
+                _clicked = false;
+
+                // released
+                if (_status == _defaultStatus) {
+
+                    // get event
+                    if (millis() - _this_start > LONG_CLICK_DELAY) {
+                        _event = EVENT_LONG_CLICK;
+                    } else if (millis() - _last_start < DOUBLE_CLICK_DELAY ) {
+                        _event = EVENT_DOUBLE_CLICK;
+                    } else {
+
+                        // We are not setting the event type here because we still don't
+                        // know what kind of event it will be (it might be a double click).
+                        // Instead we are setting the _clicked variable to check later
+                        _clicked = true;
+                        changed = false;
+
+                    }
+
+                // pressed
                 } else {
 
-                    // We are not setting the event type here because we still don't
-                    // know what kind of event it will be (it might be a double click).
-                    // Instead we are setting the _clicked variable to check later
-                    _clicked = true;
-                    changed = false;
+                    _last_start = _this_start;
+                    _this_start = millis();
+                    _event = EVENT_PRESSED;
 
                 }
 
-            // pressed
             } else {
-
-                _last_start = _this_start;
-                _this_start = millis();
-                _event = EVENT_PRESSED;
-
+                _event = EVENT_CHANGED;
             }
 
         }
@@ -95,11 +112,9 @@ bool DebounceEvent::loop() {
         _event = EVENT_SINGLE_CLICK;
     }
 
-    if (changed) {
-        if (_callback) {
-            _callback(_pin, EVENT_CHANGED);
-            _callback(_pin, _event);
-        }
+    if (changed && _callback) {
+        if (_event != EVENT_CHANGED) _callback(_pin, EVENT_CHANGED);
+        _callback(_pin, _event);
     }
 
     return changed;

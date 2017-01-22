@@ -1,12 +1,12 @@
 {
     "name": "DebounceEvent",
-    "keywords": "button,event,debounce",
-    "description": "Simple button debounce event with support for single, double and long clicks",
+    "keywords": "button,event,debounce,pushbutton,toggle",
+    "description": "Simple push button and toggle switches debounce event with support for single, double and long clicks",
     "repository": {
         "type": "git",
         "url": "https://bitbucket.org/xoseperez/debounceevent.git"
     },
-    "version": "1..0.0",
+    "version": "1.1.0",
     "license": "GPL-3.0",
     "exclude": "tests",
     "frameworks": "arduino",
