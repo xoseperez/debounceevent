@@ -18,34 +18,26 @@
 
 */
 
+#include <Arduino.h>
 #include <DebounceEvent.h>
 
-#define BUTTON_UP       0
-#define BUTTON_DOWN     4
+#define BUTTON_PIN     0
 
-void callback(uint8_t pin, uint8_t event) {
-
-    if (pin == BUTTON_UP) {
-        Serial.print("Button UP: ");
-    } else {
-        Serial.print("Button DOWN: ");
-    }
-
-    if (event == EVENT_CHANGED) Serial.println("Changed");
-    if (event == EVENT_PRESSED) Serial.println("Pressed");
-    if (event == EVENT_SINGLE_CLICK) Serial.println("Click");
-    if (event == EVENT_DOUBLE_CLICK) Serial.println("Double Click");
-    if (event == EVENT_LONG_CLICK) Serial.println("Long Click");
+void callback(uint8_t pin, uint8_t event, uint8_t count, uint16_t length) {
+    Serial.print("Event : "); Serial.print(event);
+    Serial.print(" Count : "); Serial.print(count);
+    Serial.print(" Length: "); Serial.print(length);
+    Serial.println();
 }
 
-DebounceEvent button1 = DebounceEvent(BUTTON_UP, callback, BUTTON_PUSHBUTTON | BUTTON_DEFAULT_HIGH);
-DebounceEvent button2 = DebounceEvent(BUTTON_DOWN, callback, BUTTON_SWITCH | BUTTON_DEFAULT_HIGH | BUTTON_SET_PULLUP);
+DebounceEvent button = DebounceEvent(BUTTON_PIN, callback, BUTTON_PUSHBUTTON | BUTTON_DEFAULT_HIGH);
 
 void setup() {
     Serial.begin(115200);
+    Serial.println();
+    Serial.println();
 }
 
 void loop() {
-    button1.loop();
-    button2.loop();
+    button.loop();
 }

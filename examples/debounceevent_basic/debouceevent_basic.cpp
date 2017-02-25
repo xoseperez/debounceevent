@@ -18,6 +18,7 @@
 
 */
 
+#include <Arduino.h>
 #include <DebounceEvent.h>
 
 #define BUTTON_PIN  0
@@ -26,14 +27,17 @@ DebounceEvent * button;
 
 void setup() {
     Serial.begin(115200);
+    Serial.println();
+    Serial.println();
     button = new DebounceEvent(BUTTON_PIN, BUTTON_PUSHBUTTON | BUTTON_DEFAULT_HIGH);
 }
 
 void loop() {
-    if (button->loop()) {
-        byte event = button->getEvent();
-        if (event == EVENT_SINGLE_CLICK) Serial.println("Click");
-        if (event == EVENT_DOUBLE_CLICK) Serial.println("Double Click");
-        if (event == EVENT_LONG_CLICK) Serial.println("Long Click");
+    if (unsigned int event = button->loop()) {
+        if (event == EVENT_RELEASED) {
+            Serial.print("Count : "); Serial.print(button->getEventCount());
+            Serial.print(" Length: "); Serial.print(button->getEventLength());
+            Serial.println();
+        }
     }
 }

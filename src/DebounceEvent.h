@@ -23,46 +23,42 @@
 
 #include <functional>
 
-#define BUTTON_PUSHBUTTON   0
-#define BUTTON_SWITCH       1
-#define BUTTON_DEFAULT_HIGH 2
-#define BUTTON_SET_PULLUP   4
+#define BUTTON_PUSHBUTTON       0
+#define BUTTON_SWITCH           1
+#define BUTTON_DEFAULT_HIGH     2
+#define BUTTON_SET_PULLUP       4
 
-#define DEBOUNCE_DELAY      50
-#define LONG_CLICK_DELAY    1000
-#define DOUBLE_CLICK_DELAY  500
+#define DEBOUNCE_DELAY          50
+#define CLICK_REPEAT_DELAY      500
 
-#define EVENT_NONE          0
-#define EVENT_CHANGED       1
-#define EVENT_PRESSED       2
-#define EVENT_RELEASED      3
-#define EVENT_SINGLE_CLICK  3
-#define EVENT_DOUBLE_CLICK  4
-#define EVENT_LONG_CLICK    5
-
-typedef void(*callback_t)(uint8_t pin, uint8_t event);
+#define EVENT_NONE              0
+#define EVENT_CHANGED           1
+#define EVENT_PRESSED           2
+#define EVENT_RELEASED          3
 
 class DebounceEvent {
 
     public:
 
-        typedef std::function<void(uint8_t pin, uint8_t event)> TDebounceEventCallback;
+        typedef std::function<void(uint8_t pin, uint8_t event, uint8_t count, uint16_t length)> TDebounceEventCallback;
 
         DebounceEvent(uint8_t pin, TDebounceEventCallback callback, uint8_t mode = BUTTON_PUSHBUTTON | BUTTON_DEFAULT_HIGH, unsigned long delay = DEBOUNCE_DELAY);
         DebounceEvent(uint8_t pin, uint8_t mode = BUTTON_PUSHBUTTON | BUTTON_DEFAULT_HIGH, unsigned long delay = DEBOUNCE_DELAY);
-        bool pressed();
-        bool loop();
-        uint8_t getEvent();
+        unsigned char loop();
+        bool pressed() { return (_status != _defaultStatus); }
+        unsigned long getEventLength() { return _event_length; }
+        unsigned long getEventCount() { return _event_count; }
 
     private:
 
         uint8_t _pin;
         uint8_t _mode;
-        uint8_t _status;
-        uint8_t _event;
-        bool _clicked = false;
-        unsigned long _this_start;
-        unsigned long _last_start;
+        bool _status;
+        bool _ready = false;
+        bool _reset_count = true;
+        unsigned long _event_start;
+        unsigned long _event_length;
+        unsigned char _event_count = 0;
         uint8_t _defaultStatus;
         unsigned long _delay;
         TDebounceEventCallback _callback = NULL;

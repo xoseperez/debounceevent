@@ -18,6 +18,7 @@
 
 */
 
+#include <Arduino.h>
 #include <DebounceEvent.h>
 
 #define BUTTON_PIN  0
@@ -29,7 +30,7 @@ void setup() {
 }
 
 void loop() {
-    if (button.loop()) {
+    if (button.loop() != EVENT_NONE) {
         Serial.println("Switched");
     }
 }

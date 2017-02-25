@@ -48,83 +48,63 @@ void DebounceEvent::_init(uint8_t pin, uint8_t mode, unsigned long delay) {
 
 }
 
-bool DebounceEvent::loop() {
+unsigned char DebounceEvent::loop() {
 
-    // holds whether status has changed or not
-    bool changed = false;
-    _event = EVENT_NONE;
+    unsigned char event = EVENT_NONE;
 
     if (digitalRead(_pin) != _status) {
 
         // Debounce
         unsigned long start = millis();
-        while (millis() - start < _delay) {
-            delay(1);
-        }
+        while (millis() - start < _delay) delay(1);
 
-        uint8_t newStatus = digitalRead(_pin);
-        if (newStatus != _status) {
+        if (digitalRead(_pin) != _status) {
 
-            changed = true;
-            _status = newStatus;
+            _status = !_status;
 
-            if (_mode == BUTTON_PUSHBUTTON) {
+            if (_mode == BUTTON_SWITCH) {
 
-                _clicked = false;
+                event = EVENT_CHANGED;
+
+            } else {
 
                 // released
                 if (_status == _defaultStatus) {
 
-                    // get event
-                    if (millis() - _this_start > LONG_CLICK_DELAY) {
-                        _event = EVENT_LONG_CLICK;
-                    } else if (millis() - _last_start < DOUBLE_CLICK_DELAY ) {
-                        _event = EVENT_DOUBLE_CLICK;
-                    } else {
-
-                        // We are not setting the event type here because we still don't
-                        // know what kind of event it will be (it might be a double click).
-                        // Instead we are setting the _clicked variable to check later
-                        _clicked = true;
-                        changed = false;
-
-                    }
+                    _event_length = millis() - _event_start;
+                    _ready = true;
 
                 // pressed
                 } else {
 
-                    _last_start = _this_start;
-                    _this_start = millis();
-                    _event = EVENT_PRESSED;
+                    event = EVENT_PRESSED;
+                    _event_start = millis();
+                    _event_length = 0;
+                    if (_reset_count) {
+                        _event_count = 1;
+                        _reset_count = false;
+                    } else {
+                        ++_event_count;
+                    }
+                    _ready = false;
 
                 }
 
-            } else {
-                _event = EVENT_CHANGED;
             }
 
         }
     }
 
-    if (_clicked && (millis() - _this_start > DOUBLE_CLICK_DELAY) && (!changed) && (_status == _defaultStatus)) {
-        _clicked = false;
-        changed = true;
-        _event = EVENT_SINGLE_CLICK;
+    if (_ready && (millis() - _event_start > CLICK_REPEAT_DELAY)) {
+        _ready = false;
+        _reset_count = true;
+        event = EVENT_RELEASED;
     }
 
-    if (changed && _callback) {
-        if (_event != EVENT_CHANGED) _callback(_pin, EVENT_CHANGED);
-        _callback(_pin, _event);
+    if (event != EVENT_NONE) {
+        if (_callback) _callback(_pin, event, _event_count, _event_length);
     }
 
-    return changed;
+    return event;
 
-}
-
-bool DebounceEvent::pressed() {
-    return (_status != _defaultStatus);
-}
-
-uint8_t DebounceEvent::getEvent() {
-    return _event;
 }
