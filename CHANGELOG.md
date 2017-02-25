@@ -3,6 +3,14 @@
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [2.0.0] 2017-01-25
+### Changed
+- Reporting # of clicks and length instead of predefined events
+- Callback signature changed to report click count and length
+
+### Removed
+- EVENT_SINGLE_CLICK, EVENT_DOUBLE_CLICK, EVENT_LONG_CLICK
+
 ## [1.1.0] 2017-01-22
 ### Added
 - Added support for toggle switches
