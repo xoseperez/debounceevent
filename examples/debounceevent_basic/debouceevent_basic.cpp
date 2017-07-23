@@ -21,7 +21,13 @@
 #include <Arduino.h>
 #include <DebounceEvent.h>
 
-#define BUTTON_PIN  0
+#define BUTTON_PIN              0
+
+#define CUSTOM_DEBOUNCE_DELAY   50
+
+// Time the library waits for a second (or more) clicks
+// Set to 0 to disable double clicks but get a faster response
+#define CUSTOM_REPEAT_DELAY     500
 
 DebounceEvent * button;
 
@@ -29,7 +35,7 @@ void setup() {
     Serial.begin(115200);
     Serial.println();
     Serial.println();
-    button = new DebounceEvent(BUTTON_PIN, BUTTON_PUSHBUTTON | BUTTON_DEFAULT_HIGH);
+    button = new DebounceEvent(BUTTON_PIN, BUTTON_PUSHBUTTON | BUTTON_DEFAULT_HIGH, CUSTOM_DEBOUNCE_DELAY, CUSTOM_REPEAT_DELAY);
 }
 
 void loop() {

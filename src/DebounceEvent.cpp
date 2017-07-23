@@ -21,29 +21,38 @@
 #include <Arduino.h>
 #include "DebounceEvent.h"
 
-DebounceEvent::DebounceEvent(uint8_t pin, TDebounceEventCallback callback, uint8_t mode, unsigned long delay) {
+DebounceEvent::DebounceEvent(uint8_t pin, TDebounceEventCallback callback, uint8_t mode, unsigned long delay, unsigned long repeat) {
     _callback = callback;
-    _init(pin, mode, delay);
+    _init(pin, mode, delay, repeat);
 }
 
-DebounceEvent::DebounceEvent(uint8_t pin, uint8_t mode, unsigned long delay) {
-    _init(pin, mode, delay);
+DebounceEvent::DebounceEvent(uint8_t pin, uint8_t mode, unsigned long delay, unsigned long repeat) {
+    _init(pin, mode, delay, repeat);
 }
 
 
-void DebounceEvent::_init(uint8_t pin, uint8_t mode, unsigned long delay) {
+void DebounceEvent::_init(uint8_t pin, uint8_t mode, unsigned long delay, unsigned long repeat) {
 
     // store configuration
     _pin = pin;
     _mode = mode & 0x01;
     _status = _defaultStatus = (mode & BUTTON_DEFAULT_HIGH) > 0;
     _delay = delay;
+    _repeat = repeat;
 
     // set up button
-    if ((mode & BUTTON_SET_PULLUP) > 0) {
-        pinMode(_pin, INPUT_PULLUP);
+    if (_pin == 16) {
+        if (_defaultStatus) {
+            pinMode(_pin, INPUT);
+        } else {
+            pinMode(_pin, INPUT_PULLDOWN_16);
+        }
     } else {
-        pinMode(_pin, INPUT);
+        if ((mode & BUTTON_SET_PULLUP) > 0) {
+            pinMode(_pin, INPUT_PULLUP);
+        } else {
+            pinMode(_pin, INPUT);
+        }
     }
 
 }
@@ -95,7 +104,7 @@ unsigned char DebounceEvent::loop() {
         }
     }
 
-    if (_ready && (millis() - _event_start > CLICK_REPEAT_DELAY)) {
+    if (_ready && (millis() - _event_start > _repeat)) {
         _ready = false;
         _reset_count = true;
         event = EVENT_RELEASED;

@@ -29,7 +29,7 @@
 #define BUTTON_SET_PULLUP       4
 
 #define DEBOUNCE_DELAY          50
-#define CLICK_REPEAT_DELAY      500
+#define REPEAT_DELAY            500
 
 #define EVENT_NONE              0
 #define EVENT_CHANGED           1
@@ -42,8 +42,8 @@ class DebounceEvent {
 
         typedef std::function<void(uint8_t pin, uint8_t event, uint8_t count, uint16_t length)> TDebounceEventCallback;
 
-        DebounceEvent(uint8_t pin, TDebounceEventCallback callback, uint8_t mode = BUTTON_PUSHBUTTON | BUTTON_DEFAULT_HIGH, unsigned long delay = DEBOUNCE_DELAY);
-        DebounceEvent(uint8_t pin, uint8_t mode = BUTTON_PUSHBUTTON | BUTTON_DEFAULT_HIGH, unsigned long delay = DEBOUNCE_DELAY);
+        DebounceEvent(uint8_t pin, TDebounceEventCallback callback, uint8_t mode = BUTTON_PUSHBUTTON | BUTTON_DEFAULT_HIGH, unsigned long delay = DEBOUNCE_DELAY, unsigned long repeat = REPEAT_DELAY);
+        DebounceEvent(uint8_t pin, uint8_t mode = BUTTON_PUSHBUTTON | BUTTON_DEFAULT_HIGH, unsigned long delay = DEBOUNCE_DELAY, unsigned long repeat = REPEAT_DELAY);
         unsigned char loop();
         bool pressed() { return (_status != _defaultStatus); }
         unsigned long getEventLength() { return _event_length; }
@@ -61,9 +61,10 @@ class DebounceEvent {
         unsigned char _event_count = 0;
         uint8_t _defaultStatus;
         unsigned long _delay;
+        unsigned long _repeat;
         TDebounceEventCallback _callback = NULL;
 
-        void _init(uint8_t pin, uint8_t mode, unsigned long delay);
+        void _init(uint8_t pin, uint8_t mode, unsigned long delay, unsigned long repeat);
 
 };
 
