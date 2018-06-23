@@ -3,6 +3,10 @@
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [2.0.2] 2018-06-23
+### Changed
+- Moved license to LGPL-3.0
+
 ## [2.0.1] 2017-07-23
 ### Added
 - Added the option to specify repeat delay in constructor (set it to 0 to disable double click but get immediate responses)

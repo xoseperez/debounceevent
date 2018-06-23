@@ -6,11 +6,11 @@
         "type": "git",
         "url": "https://bitbucket.org/xoseperez/debounceevent.git"
     },
-    "version": "2.0.1",
+    "version": "2.0.2",
     "license": "GPL-3.0",
     "exclude": "tests",
     "frameworks": "arduino",
-    "platforms": "arduino,espressif8266",
+    "platforms": "espressif8266",
     "dependencies": [
     ],
     "authors": {
@@ -20,6 +20,6 @@
         "maintainer": true
     },
     "examples": [
-        "examples/*/*.cpp"
+        "examples/*/*.ino"
     ]
 }
