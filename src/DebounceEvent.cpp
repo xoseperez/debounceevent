@@ -37,7 +37,8 @@ void DebounceEvent::_init(uint8_t pin, uint8_t mode, unsigned long delay, unsign
     // store configuration
     _pin = pin;
     _mode = mode & 0x01;
-    _status = _defaultStatus = ((mode & BUTTON_DEFAULT_HIGH) > 0);
+    _defaultStatus = ((mode & BUTTON_DEFAULT_HIGH) > 0);
+    _status = (_mode == BUTTON_SWITCH) ? digitalRead(_pin) : _defaultStatus;
     _delay = delay;
     _repeat = repeat;
 
