@@ -2,22 +2,22 @@
 # Datatypes (KEYWORD1)
 #######################################
 
-TDebounceEventCallback  KEYWORD1
+TDebounceEventCallback	KEYWORD1
 
 #######################################
 # Classes (KEYWORD1)
 #######################################
 
-DebounceEvent           KEYWORD1
+DebounceEvent	KEYWORD1
 
 #######################################
 # Methods and Functions (KEYWORD2)
 #######################################
 
-loop                    KEYWORD2
-pressed                 KEYWORD2
-getEventLength          KEYWORD2
-getEventCount           KEYWORD2
+loop	KEYWORD2
+pressed	KEYWORD2
+getEventLength	KEYWORD2
+getEventCount	KEYWORD2
 
 #######################################
 # Instances (KEYWORD2)
@@ -27,15 +27,15 @@ getEventCount           KEYWORD2
 # Constants (LITERAL1)
 #######################################
 
-BUTTON_PUSHBUTTON       LITERAL1
-BUTTON_SWITCH           LITERAL1
-BUTTON_DEFAULT_HIGH     LITERAL1
-BUTTON_SET_PULLUP       LITERAL1
+BUTTON_PUSHBUTTON	LITERAL1
+BUTTON_SWITCH	LITERAL1
+BUTTON_DEFAULT_HIGH	LITERAL1
+BUTTON_SET_PULLUP	LITERAL1
 
-DEBOUNCE_DELAY          LITERAL1
-REPEAT_DELAY            LITERAL1
+DEBOUNCE_DELAY	LITERAL1
+REPEAT_DELAY	LITERAL1
 
-EVENT_NONE              LITERAL1
-EVENT_CHANGED           LITERAL1
-EVENT_PRESSED           LITERAL1
-EVENT_RELEASED          LITERAL1
+EVENT_NONE	LITERAL1
+EVENT_CHANGED	LITERAL1
+EVENT_PRESSED	LITERAL1
+EVENT_RELEASED	LITERAL1
