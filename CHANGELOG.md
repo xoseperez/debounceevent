@@ -3,6 +3,13 @@
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [2.0.4] 2018-09-09
+### Fixed
+- Examples file names and keywords compatible with Arduino IDE (thanks to @per1234)
+
+### Added
+- Suport for AVR boards
+
 ## [2.0.3] 2018-08-29
 ### Fixed
 - Fixed initial status for switches (thanks to @BauerPh)

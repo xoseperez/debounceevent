@@ -22,12 +22,13 @@
 #include <Arduino.h>
 #include "DebounceEvent.h"
 
-DebounceEvent::DebounceEvent(uint8_t pin, TDebounceEventCallback callback, uint8_t mode, unsigned long delay, unsigned long repeat) {
-    _callback = callback;
+DebounceEvent::DebounceEvent(uint8_t pin, DEBOUNCE_EVENT_CALLBACK_SIGNATURE, uint8_t mode, unsigned long delay, unsigned long repeat) {
+    this->callback = callback;
     _init(pin, mode, delay, repeat);
 }
 
 DebounceEvent::DebounceEvent(uint8_t pin, uint8_t mode, unsigned long delay, unsigned long repeat) {
+    this->callback = NULL;
     _init(pin, mode, delay, repeat);
 }
 
@@ -43,6 +44,7 @@ void DebounceEvent::_init(uint8_t pin, uint8_t mode, unsigned long delay, unsign
     _repeat = repeat;
 
     // set up button
+    #if ESP8266
     if (_pin == 16) {
         if (_defaultStatus) {
             pinMode(_pin, INPUT);
@@ -50,12 +52,15 @@ void DebounceEvent::_init(uint8_t pin, uint8_t mode, unsigned long delay, unsign
             pinMode(_pin, INPUT_PULLDOWN_16);
         }
     } else {
+    #endif // ESP8266
         if ((mode & BUTTON_SET_PULLUP) > 0) {
             pinMode(_pin, INPUT_PULLUP);
         } else {
             pinMode(_pin, INPUT);
         }
+    #if ESP8266
     }
+    #endif // ESP8266
 
 }
 
@@ -113,7 +118,7 @@ unsigned char DebounceEvent::loop() {
     }
 
     if (event != EVENT_NONE) {
-        if (_callback) _callback(_pin, event, _event_count, _event_length);
+        if (this->callback) this->callback(_pin, event, _event_count, _event_length);
     }
 
     return event;

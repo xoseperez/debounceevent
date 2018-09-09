@@ -4,13 +4,13 @@
     "description": "Simple push button and toggle switch debounce library that reports number of clicks and length",
     "repository": {
         "type": "git",
-        "url": "https://bitbucket.org/xoseperez/debounceevent"
+        "url": "https://github.com/xoseperez/debounceevent"
     },
-    "version": "2.0.3",
+    "version": "2.0.4",
     "license": "GPL-3.0",
     "exclude": "tests",
     "frameworks": "arduino",
-    "platforms": "espressif8266",
+    "platforms": ["atmelavr","espressif8266"],
     "dependencies": [
     ],
     "authors": {

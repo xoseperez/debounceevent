@@ -22,7 +22,12 @@
 #ifndef _DEBOUNCE_EVENT_h
 #define _DEBOUNCE_EVENT_h
 
+#ifdef ESP8266
 #include <functional>
+#define DEBOUNCE_EVENT_CALLBACK_SIGNATURE std::function<void(uint8_t pin, uint8_t event, uint8_t count, uint16_t length)> callback
+#else
+#define DEBOUNCE_EVENT_CALLBACK_SIGNATURE void (*callback)(uint8_t pin, uint8_t event, uint8_t count, uint16_t length)
+#endif
 
 #define BUTTON_PUSHBUTTON       0
 #define BUTTON_SWITCH           1
@@ -41,9 +46,7 @@ class DebounceEvent {
 
     public:
 
-        typedef std::function<void(uint8_t pin, uint8_t event, uint8_t count, uint16_t length)> TDebounceEventCallback;
-
-        DebounceEvent(uint8_t pin, TDebounceEventCallback callback, uint8_t mode = BUTTON_PUSHBUTTON | BUTTON_DEFAULT_HIGH, unsigned long delay = DEBOUNCE_DELAY, unsigned long repeat = REPEAT_DELAY);
+        DebounceEvent(uint8_t pin, DEBOUNCE_EVENT_CALLBACK_SIGNATURE, uint8_t mode = BUTTON_PUSHBUTTON | BUTTON_DEFAULT_HIGH, unsigned long delay = DEBOUNCE_DELAY, unsigned long repeat = REPEAT_DELAY);
         DebounceEvent(uint8_t pin, uint8_t mode = BUTTON_PUSHBUTTON | BUTTON_DEFAULT_HIGH, unsigned long delay = DEBOUNCE_DELAY, unsigned long repeat = REPEAT_DELAY);
         unsigned char loop();
         bool pressed() { return (_status != _defaultStatus); }
@@ -63,7 +66,7 @@ class DebounceEvent {
         uint8_t _defaultStatus;
         unsigned long _delay;
         unsigned long _repeat;
-        TDebounceEventCallback _callback = NULL;
+        DEBOUNCE_EVENT_CALLBACK_SIGNATURE;
 
         void _init(uint8_t pin, uint8_t mode, unsigned long delay, unsigned long repeat);
 

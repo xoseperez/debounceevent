@@ -1,7 +1,7 @@
 /*
 
   Debounce buttons and trigger events
-  Copyright (C) 2015-2017 by Xose Pérez <xose dot perez at gmail dot com>
+  Copyright (C) 2015-2018 by Xose Pérez <xose dot perez at gmail dot com>
 
   This program is free software: you can redistribute it and/or modify
   it under the terms of the GNU General Public License as published by
@@ -21,7 +21,7 @@
 #include <Arduino.h>
 #include <DebounceEvent.h>
 
-#define BUTTON_PIN              0
+#define BUTTON_PIN              4
 
 #define CUSTOM_DEBOUNCE_DELAY   50
 
@@ -35,7 +35,7 @@ void setup() {
     Serial.begin(115200);
     Serial.println();
     Serial.println();
-    button = new DebounceEvent(BUTTON_PIN, BUTTON_PUSHBUTTON | BUTTON_DEFAULT_HIGH, CUSTOM_DEBOUNCE_DELAY, CUSTOM_REPEAT_DELAY);
+    button = new DebounceEvent(BUTTON_PIN, BUTTON_PUSHBUTTON | BUTTON_DEFAULT_HIGH | BUTTON_SET_PULLUP, CUSTOM_DEBOUNCE_DELAY, CUSTOM_REPEAT_DELAY);
 }
 
 void loop() {
