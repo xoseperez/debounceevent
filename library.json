@@ -6,19 +6,24 @@
         "type": "git",
         "url": "https://github.com/xoseperez/debounceevent"
     },
-    "version": "2.0.4",
+    "version": "3.0.0",
     "license": "GPL-3.0",
     "exclude": "tests",
     "frameworks": "arduino",
     "platforms": ["atmelavr","espressif8266"],
     "dependencies": [
     ],
-    "authors": {
-        "name": "Xose Perez",
-        "email": "xose.perez@gmail.com",
-        "url": "http://tinkerman.cat",
-        "maintainer": true
-    },
+    "authors": [
+        {
+            "name": "Xose Perez",
+            "email": "xose.perez@gmail.com",
+            "url": "http://tinkerman.cat",
+            "maintainer": true
+        },
+        {
+            "name": "Arjan Mels"
+        }
+    ],
     "examples": [
         "examples/*/*.ino"
     ]

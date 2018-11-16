@@ -3,6 +3,12 @@
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [3.0.0] 2018-11-16
+### Added
+- Support for capacitive/resistive touch button
+### Changed
+- Removed busy waiting for debounce
+
 ## [2.0.4] 2018-09-09
 ### Fixed
 - Examples file names and keywords compatible with Arduino IDE (thanks to @per1234)
