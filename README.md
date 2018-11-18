@@ -1,6 +1,6 @@
 # DebounceEvent
 
-Simple push button and toggle switch debounce library for AVR and ESP8266 platforms under the Arduino framework that reports number of clicks and length
+Simple push button and toggle switch debounce detection and capacitive/resistive touch library for AVR and ESP8266 platforms under the Arduino framework that reports number of clicks and length
 
 [![version](https://img.shields.io/badge/version-2.0.4-brightgreen.svg)](CHANGELOG.md)
 [![license](https://img.shields.io/badge/license-LGPL--3.0-orange.svg)](LICENSE)
@@ -18,6 +18,18 @@ The main features of the DebounceEvent library are:
 * Isolation between buttons
 * Create modular code using callbacks
 
+* Handles resistive/capacitive touch button detection.
+
+## Operation
+
+The touch detection is based on the time it takes for a pin to return to the opposite state when switched from output to input mode.
+
+A touch button can be implemented by simply connecting a resistor between pin and gnd or pin and vdd (set BUTTON_SET_PULLUP) and connecting a piece of conducting material to the pin. These will form an RC network, which determines the decay time. A change to R or C will be detected.
+
+On ESP8266 it has been tested with a 2.2MOhm resistor between pin and ground and a piece of wire connected to the pin.
+
+The routine works by taking a long term average and a short term averahe. WHen the short term average differs significantly from the long term average this is seen as a button press. To determine if the change is significant the variance of the short term averages is calculated; the detection threshold is a configurable multiplier times the variance.
+
 ## Usage
 
 See examples.
@@ -25,6 +37,7 @@ See examples.
 ## License
 
 Copyright (C) 2015-2018 by Xose Pérez <xose dot perez at gmail dot com>
+Contributions by Arjan Mels
 
 The DebounceEvent library is free software: you can redistribute it and/or modify
 it under the terms of the GNU Lesser General Public License as published by
