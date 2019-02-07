@@ -3,6 +3,10 @@
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [2.0.5] 2019-02-07
+### Fixed
+- Do digitalRead after setting pin mode (thanks to @mcspr)
+
 ## [2.0.4] 2018-09-09
 ### Fixed
 - Examples file names and keywords compatible with Arduino IDE (thanks to @per1234)

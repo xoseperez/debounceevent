@@ -2,7 +2,7 @@
 
 Simple push button and toggle switch debounce library for AVR and ESP8266 platforms under the Arduino framework that reports number of clicks and length
 
-[![version](https://img.shields.io/badge/version-2.0.4-brightgreen.svg)](CHANGELOG.md)
+[![version](https://img.shields.io/badge/version-2.0.5-brightgreen.svg)](CHANGELOG.md)
 [![license](https://img.shields.io/badge/license-LGPL--3.0-orange.svg)](LICENSE)
 <br />
 [![donate](https://img.shields.io/badge/donate-PayPal-blue.svg)](https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=xose%2eperez%40gmail%2ecom&lc=US&no_note=0&currency_code=EUR&bn=PP%2dDonationsBF%3abtn_donate_LG%2egif%3aNonHostedGuest)
