@@ -39,7 +39,6 @@ void DebounceEvent::_init(uint8_t pin, uint8_t mode, unsigned long delay, unsign
     _pin = pin;
     _mode = mode & 0x01;
     _defaultStatus = ((mode & BUTTON_DEFAULT_HIGH) > 0);
-    _status = (_mode == BUTTON_SWITCH) ? digitalRead(_pin) : _defaultStatus;
     _delay = delay;
     _repeat = repeat;
 
@@ -61,6 +60,8 @@ void DebounceEvent::_init(uint8_t pin, uint8_t mode, unsigned long delay, unsign
     #if ESP8266
     }
     #endif // ESP8266
+
+    _status = (_mode == BUTTON_SWITCH) ? digitalRead(_pin) : _defaultStatus;
 
 }
 
