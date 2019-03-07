@@ -60,6 +60,8 @@ class DebounceEvent {
         bool _status;
         bool _ready = false;
         bool _reset_count = true;
+        unsigned long _debounce_start;
+        bool _debounce_status;
         unsigned long _event_start;
         unsigned long _event_length;
         unsigned char _event_count = 0;
