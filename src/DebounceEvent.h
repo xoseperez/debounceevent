@@ -22,7 +22,7 @@
 #ifndef _DEBOUNCE_EVENT_h
 #define _DEBOUNCE_EVENT_h
 
-#ifdef ESP8266
+#if defined ESP8266 | defined ESP32
 #include <functional>
 #define DEBOUNCE_EVENT_CALLBACK_SIGNATURE std::function<void(uint8_t pin, uint8_t event, uint8_t count, uint16_t length)> callback
 #else
