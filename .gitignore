@@ -10,3 +10,6 @@ docs/*
 
 # Credentials
 credentials.h
+
+# arduino CI unit tests
+*.bin
