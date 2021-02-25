@@ -51,6 +51,7 @@ class DebounceEvent {
         unsigned char loop();
         bool pressed() { return (_status != _defaultStatus); }
         unsigned long getEventLength() { return _event_length; }
+        unsigned long getPressLength() { return pressed()?millis()-_event_start:_event_length; }
         unsigned long getEventCount() { return _event_count; }
 
     private:
